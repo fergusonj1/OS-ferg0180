@@ -36,42 +36,17 @@ void reset() {
 			print_to_screen("ferg0180 operating system starting...");
 			print_newline();
 			print_to_screen("testing hardware");
-			
+			print_newline();
+			print_to_screen("memory found at $0800 - $8000");
+			print_newline();
+			print_to_screen("fnished testing hardware");
+
+test_memory();
+
 			// Loop forever 
 			while(true) {
 			}	
 }
-unsigned short mem_start = $0800;
-unsigned short mem_end = $8000;
-void test_memory();
-
-void print_hex(unsigned short value) {
-
-	char[5] hex;
-	unsigned char i;
-	for(i=0;i<4;i++) {
-		if (value<0xa000) hex[i] = '0' + (char) (value)>>12);
-		else hex[i] = (char) (value>>12) -9;
-		value<<=4;
-	}
-	
-	hex[4] = 0;
-	print_to_screen(hex);
-}
-print_hex((unsigned short)a_pointer);
-
-print_to_screen("the value is $");
-print_hex($1234);
-print_newline();
-
-volatile unsigned char *p;
-
-*p = value;
-
-if (*p!=value) {
-	print_to_screen("we read back something different so this memory location isn't valid");
-}
-	
 	
 void main() {
 }
@@ -91,6 +66,49 @@ void print_newline() {
 	current_screen_line += $28; //40 in decimal
 	current_screen_x = 0;
 }
+
+unsigned short mem_start = $0800;
+unsigned short mem_end = $8000;
+
+void test_memory() {
+	for(p=mem_start;p<mem_end;p+=$10) {
+	
+		for(char i=0;i<255;i++) {
+			*p=i;
+				if (p!=i){
+				print_to_screen("memory error found")
+			}
+		}
+	}
+}
+
+void print_hex(unsigned short value) {
+
+	char[5] hex;
+	unsigned char i;
+	for(i=0;i<4;i++) {
+		if (value<0xa000) hex[i] = '0' + (char) (value)>>12);
+		else hex[i] = (char) (value>>12) -9;
+		value<<=4;
+	}
+	
+	hex[4] = 0;
+	print_to_screen(hex);
+}
+
+
+print_to_screen("the value is $");
+print_hex($1234);
+print_newline();
+
+volatile unsigned char *p;
+
+*p = value;
+
+if (*p!=value) {
+	print_to_screen("we read back something different so this memory location isn't valid");
+}
+	
 	
 	
 		
