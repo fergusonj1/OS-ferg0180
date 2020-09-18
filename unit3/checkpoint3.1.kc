@@ -18,7 +18,10 @@ const char WHITE = 1;
 const char RED = 2;
 
 //Some text to display
-char[] MESSAGE = "checkpoint 2.3 by ferg0180";
+char[] MESSAGE = "checkpoint 3.1 by ferg0180";
+
+unsigned char *current_screen_line = $0400;
+unsigned char current_screen_x = 0;
 
 
 void reset() {
@@ -28,55 +31,38 @@ void reset() {
 			memset(SCREEN,' ',40*25);
 			//Set the color of every character on the screen to white
 			memset(COLS, WHITE, 40*25);
-			//Print the "hello world" message
-			char* sc = SCREEN+40;		// Display it one line down on the screen
-			char* msg = MESSAGE;		// The message to display
-			//A simple copy routine to copy the string
-			while(*msg) {
-					*sc++ = *msg++;
-					}
-			// Loop forever showning the two white lines as raster bars
+			
+			// print to screen
+			print_to_screen("ferg0180 operating system starting...");
+			print_newline();
+			print_to_screen("testing hardware");
+			
+			// Loop forever 
 			while(true) {
-					if(*RASTER==54 || *RASTER==66) {
-							*BGCOL = WHITE;
-						} else {
-								*BGCOL = BLACK;
-						}
 			}	
 }
 
-
 void main() {
 }
-unsigned int current_screen_line = $0400;
-unsigned int current_screen_x = 0;
+
 
 void print_to_screen(char *message) {
 
-	for(int i=0; i<strlen(message); i++)
-	{
-	printf("%c",message[i]);
-	current_screen_x=(current_screen_x+1);
-		}	
-	}
+	while(*message){
+		*(current_screen_line + current_screen_x) = *message++;
+		current_screen_x++;
+	}	
+}
+	
 	
 void print_newline() {
 
-	print_to_screen("\n");
-	current_screen_line=(current_screen_line+1);
-	current_screen_x=0;
-	}
-	void reset() {
-	
-	print_to_screen("ferg0180 operating system starting...");
-	print_newline();
-	print_to_screen("testing hardware");
-	}
-	
-int main() {
-reset();
+	current_screen_line += $28; //40 in decimal
+	current_screen_x = 0;
 }
-				
+	
+	
+		
 //Here are a couple sample SYSCALL handlers that just display a character on the screen
 void syscall1() {
 			*(SCREEN+79) = '>';
