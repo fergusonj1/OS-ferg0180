@@ -35,15 +35,14 @@ void reset() {
 			while(*msg) {
 					*sc++ = *msg++;
 					}
+					
+					start_simple_program();
+					
 			// Loop forever showning the two white lines as raster bars
 			while(true) {
-					if(*RASTER==54 || *RASTER==66) {
-							*BGCOL = WHITE;
-						} else {
-								*BGCOL = BLACK;
-						}
+					
 			}	
-	start_simple_program();		
+			
 }
 
 
@@ -51,7 +50,7 @@ void reset() {
 
 void start_simple_program() {
 
-*(unsigned char *)$d648 = $080d;
+
 
 *(unsigned char *)$0300 = $80;
 *(unsigned char *)$0301 = $00;
@@ -66,14 +65,14 @@ void start_simple_program() {
 *(unsigned char *)$030a = $02;
 *(unsigned char *)$030b = $01;
 *(unsigned char *)$030c = $08;
-*(unsigned char *)$030d = $00;
+*(unsigned char *)$030d = $00; 
 *(unsigned char *)$030e = $00;
 *(unsigned char *)$030f = $00;
 *(unsigned char *)$0310 = $60;
 *(unsigned char *)$d701 = $03;
 *(unsigned char *)$d702 = $00;
 *(unsigned char *)$d705 = $00;
-
+*(unsigned word *)$d648 = $080d;
 exit_hypervisor();
 }
 
